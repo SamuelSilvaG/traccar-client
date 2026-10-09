@@ -27,6 +27,9 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _refreshState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAutoStart();
+    });
   }
 
   @override
@@ -39,6 +42,20 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _refreshState();
+      _checkAutoStart();
+    }
+  }
+
+  Future<void> _checkAutoStart() async {
+    final shouldTrack = Preferences.instance.getBool(Preferences.status) ?? true;
+    final isTracking = await GeolocationService.tracker.isTracking();
+    if (shouldTrack && !isTracking) {
+      try {
+        await GeolocationService.tracker.start();
+      } on PlatformException {
+        // permission denied or startup error
+      }
+      await _refreshState();
     }
   }
 
@@ -100,10 +117,12 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                         ),
                       );
                     }
+                    await Preferences.instance.setBool(Preferences.status, started);
                     setState(() => trackingEnabled = started);
                   } else {
                     FirebaseCrashlytics.instance.log('tracking_toggle_stop');
                     await GeolocationService.tracker.stop();
+                    await Preferences.instance.setBool(Preferences.status, false);
                     if (mounted) setState(() => trackingEnabled = false);
                   }
                 }

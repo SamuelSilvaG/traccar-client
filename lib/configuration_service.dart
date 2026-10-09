@@ -27,6 +27,7 @@ class ConfigurationService {
     await _applyBoolParameter(parameters, Preferences.wakelock);
     await _applyBoolParameter(parameters, Preferences.stopDetection);
     await _applyBoolParameter(parameters, Preferences.preferPlatformProviders);
+    await _applyBoolParameter(parameters, Preferences.status);
     await GeolocationService.tracker.setConfig(Preferences.buildConfig());
   }
 

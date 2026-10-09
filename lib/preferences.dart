@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_android/shared_preferences_android.dart';
 import 'package:traccar_client_sdk/traccar_client_sdk.dart';
@@ -21,6 +22,7 @@ class Preferences {
   static const String stopDetection = 'stop_detection';
   static const String preferPlatformProviders = 'prefer_platform_providers';
   static const String password = 'password';
+  static const String status = 'status';
 
   static Future<void> init() async {
     _initFuture ??= _createInstance();
@@ -34,7 +36,7 @@ class Preferences {
           : SharedPreferencesOptions(),
       cacheOptions: SharedPreferencesWithCacheOptions(
         allowList: {
-          id, url, accuracy, distance, interval, angle, heartbeat, buffer, wakelock, stopDetection, preferPlatformProviders, password,
+          id, url, accuracy, distance, interval, angle, heartbeat, buffer, wakelock, stopDetection, preferPlatformProviders, password, status,
         },
       ),
     );
@@ -45,16 +47,42 @@ class Preferences {
         }
       }
     }
+
+    String? deviceIdValue;
+    if (Platform.isAndroid) {
+      try {
+        const platform = MethodChannel('org.traccar.client/device');
+        final String? nativeId = await platform.invokeMethod('getDeviceId');
+        if (nativeId != null && nativeId.trim().isNotEmpty) {
+          deviceIdValue = nativeId.trim();
+        }
+      } catch (_) {}
+    }
+
     if (instance.getString(id) == null) {
-      await instance.setString(id, (Random().nextInt(90000000) + 10000000).toString());
+      final initialId = (deviceIdValue != null && deviceIdValue.isNotEmpty)
+          ? deviceIdValue
+          : (Random().nextInt(90000000) + 10000000).toString();
+      await instance.setString(id, initialId);
       await instance.setString(url, 'http://mdm.grupo-nso.com.br:5055');
       await instance.setString(accuracy, 'medium');
       await instance.setInt(interval, 300);
       await instance.setInt(distance, 75);
       await instance.setBool(buffer, true);
       await instance.setBool(stopDetection, true);
-    } else if (instance.getString(url) == 'http://demo.traccar.org:5055') {
+      await instance.setBool(status, true);
+    } else {
+      final currentId = instance.getString(id) ?? '';
+      if (deviceIdValue != null && deviceIdValue.isNotEmpty && currentId.length == 8 && int.tryParse(currentId) != null) {
+        await instance.setString(id, deviceIdValue);
+      }
+    }
+
+    if (instance.getString(url) == 'http://demo.traccar.org:5055') {
       await instance.setString(url, 'http://mdm.grupo-nso.com.br:5055');
+    }
+    if (instance.getBool(status) == null) {
+      await instance.setBool(status, true);
     }
   }
 
