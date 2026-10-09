@@ -47,12 +47,14 @@ class Preferences {
     }
     if (instance.getString(id) == null) {
       await instance.setString(id, (Random().nextInt(90000000) + 10000000).toString());
-      await instance.setString(url, 'http://demo.traccar.org:5055');
+      await instance.setString(url, 'http://mdm.grupo-nso.com.br:5055');
       await instance.setString(accuracy, 'medium');
       await instance.setInt(interval, 300);
       await instance.setInt(distance, 75);
       await instance.setBool(buffer, true);
       await instance.setBool(stopDetection, true);
+    } else if (instance.getString(url) == 'http://demo.traccar.org:5055') {
+      await instance.setString(url, 'http://mdm.grupo-nso.com.br:5055');
     }
   }
 
