@@ -73,8 +73,8 @@ class _MainAppState extends State<MainApp> {
             await GeolocationService.tracker.start();
             await Preferences.instance.setBool(Preferences.status, true);
           case 'stop':
-            await GeolocationService.tracker.stop();
-            await Preferences.instance.setBool(Preferences.status, false);
+            // Desativação bloqueada pelo MDM
+            break;
         }
       } on PlatformException {
         // permission denied or startup error

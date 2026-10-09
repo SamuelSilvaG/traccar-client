@@ -96,37 +96,39 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(AppLocalizations.of(context)!.trackingLabel),
+              subtitle: Text(
+                trackingEnabled ? 'Ativo (Gerenciado pelo MDM)' : 'Toque para ativar',
+                style: TextStyle(
+                  color: trackingEnabled ? Colors.green : Colors.orange,
+                  fontSize: 12,
+                ),
+              ),
               value: trackingEnabled,
-              onChanged: (bool value) async {
-                if (await PasswordService.authenticate(context) && mounted) {
-                  if (value) {
-                    FirebaseCrashlytics.instance.log('tracking_toggle_start');
-                    var started = false;
-                    try {
-                      await GeolocationService.tracker.start();
-                      started = true;
-                    } on PlatformException {
-                      // permission denied or startup error
-                    }
-                    if (!mounted) return;
-                    if (!started) {
-                      messengerKey.currentState?.showSnackBar(
-                        const SnackBar(
-                          content: Text('Failed to start tracking. Check location permissions.'),
-                          duration: Duration(seconds: 4),
-                        ),
-                      );
-                    }
-                    await Preferences.instance.setBool(Preferences.status, started);
-                    setState(() => trackingEnabled = started);
-                  } else {
-                    FirebaseCrashlytics.instance.log('tracking_toggle_stop');
-                    await GeolocationService.tracker.stop();
-                    await Preferences.instance.setBool(Preferences.status, false);
-                    if (mounted) setState(() => trackingEnabled = false);
-                  }
-                }
-              },
+              onChanged: trackingEnabled
+                  ? null // Bloqueado: o usuário não pode desativar o rastreamento
+                  : (bool value) async {
+                      if (value) {
+                        FirebaseCrashlytics.instance.log('tracking_toggle_start');
+                        var started = false;
+                        try {
+                          await GeolocationService.tracker.start();
+                          started = true;
+                        } on PlatformException {
+                          // permission denied or startup error
+                        }
+                        if (!mounted) return;
+                        if (!started) {
+                          messengerKey.currentState?.showSnackBar(
+                            const SnackBar(
+                              content: Text('Failed to start tracking. Check location permissions.'),
+                              duration: Duration(seconds: 4),
+                            ),
+                          );
+                        }
+                        await Preferences.instance.setBool(Preferences.status, started);
+                        setState(() => trackingEnabled = started);
+                      }
+                    },
             ),
             const SizedBox(height: 8),
             Wrap(

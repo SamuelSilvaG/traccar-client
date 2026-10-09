@@ -26,7 +26,8 @@ class _QuickActionsInitializerState extends State<QuickActionsInitializer> {
           case 'start':
             await GeolocationService.tracker.start();
           case 'stop':
-            await GeolocationService.tracker.stop();
+            // Desativação bloqueada pelo MDM
+            break;
           case 'sos':
             await GeolocationService.tracker.requestPosition(alarm: 'sos');
         }
@@ -46,7 +47,6 @@ class _QuickActionsInitializerState extends State<QuickActionsInitializer> {
     final localizations = AppLocalizations.of(context)!;
     quickActions.setShortcutItems(<ShortcutItem>[
       ShortcutItem(type: 'start', localizedTitle: localizations.startAction, icon: 'play'),
-      ShortcutItem(type: 'stop', localizedTitle: localizations.stopAction, icon: 'stop'),
       ShortcutItem(type: 'sos', localizedTitle: localizations.sosAction, icon: 'exclamation'),
     ]);
   }
