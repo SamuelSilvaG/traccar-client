@@ -24,9 +24,26 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun getDeviceIdentifier(): String {
-        // 1. Try Headwind MDM Content Provider
+        // 1. Try Hardware Serial Number (Build.getSerial)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val serial = Build.getSerial()
+                if (!serial.isNullOrEmpty() && serial != Build.UNKNOWN) {
+                    return serial
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                val serial = Build.SERIAL
+                if (!serial.isNullOrEmpty() && serial != Build.UNKNOWN) {
+                    return serial
+                }
+            }
+        } catch (_: SecurityException) {} catch (_: Exception) {}
+
+        // 2. Try Headwind MDM Content Provider (serial, device_number, etc.)
         try {
             val hmdmUris = arrayOf(
+                "content://com.hmdm.launcher.provider/serial",
                 "content://com.hmdm.launcher.provider/device_number",
                 "content://com.hmdm.launcher.provider/device_id",
                 "content://com.hmdm.launcher.provider/imei"
@@ -43,7 +60,7 @@ class MainActivity : FlutterActivity() {
             }
         } catch (_: Exception) {}
 
-        // 2. Try TelephonyManager for IMEI or Device ID
+        // 3. Try TelephonyManager for IMEI or Device ID
         try {
             val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
             if (telephonyManager != null) {
@@ -61,7 +78,7 @@ class MainActivity : FlutterActivity() {
             }
         } catch (_: Exception) {}
 
-        // 3. Fallback to Settings.Secure.ANDROID_ID
+        // 4. Fallback to Settings.Secure.ANDROID_ID
         try {
             val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
             if (!androidId.isNullOrEmpty()) {

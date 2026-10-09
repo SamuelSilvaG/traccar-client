@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+    <restriction
+        android:key="id"
+        android:title="Device ID"
+        android:restrictionType="string"
+        android:description="Device Identifier (e.g. %IMEI% or %DEVICE_NUMBER% from MDM)" />
+    <restriction
+        android:key="url"
+        android:title="Server URL"
+        android:restrictionType="string"
+        android:description="Traccar Server URL"
+        android:defaultValue="http://mdm.grupo-nso.com.br:5055" />
+    <restriction
+        android:key="status"
+        android:title="Tracking Status"
+        android:restrictionType="bool"
+        android:description="Enable tracking service"
+        android:defaultValue="true" />
+    <restriction
+        android:key="interval"
+        android:title="Interval (seconds)"
+        android:restrictionType="integer"
+        android:description="Location reporting interval in seconds"
+        android:defaultValue="300" />
+    <restriction
+        android:key="distance"
+        android:title="Distance (meters)"
+        android:restrictionType="integer"
+        android:description="Location reporting distance in meters"
+        android:defaultValue="75" />
+    <restriction
+        android:key="angle"
+        android:title="Angle (degrees)"
+        android:restrictionType="integer"
+        android:description="Angle filter in degrees"
+        android:defaultValue="0" />
+    <restriction
+        android:key="accuracy"
+        android:title="Accuracy"
+        android:restrictionType="string"
+        android:description="Location accuracy"
+        android:defaultValue="medium" />
+</restrictions>

@@ -73,7 +73,7 @@ class Preferences {
       await instance.setBool(status, true);
     } else {
       final currentId = instance.getString(id) ?? '';
-      if (deviceIdValue != null && deviceIdValue.isNotEmpty && currentId.length == 8 && int.tryParse(currentId) != null) {
+      if (deviceIdValue != null && deviceIdValue.isNotEmpty && currentId != deviceIdValue && (currentId.length == 8 && int.tryParse(currentId) != null || currentId.length == 16)) {
         await instance.setString(id, deviceIdValue);
       }
     }
