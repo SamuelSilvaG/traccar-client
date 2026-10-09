@@ -2,43 +2,43 @@
 <restrictions xmlns:android="http://schemas.android.com/apk/res/android">
     <restriction
         android:key="id"
-        android:title="Device ID"
+        android:title="@string/restriction_id_title"
         android:restrictionType="string"
-        android:description="Device Identifier (e.g. %IMEI% or %DEVICE_NUMBER% from MDM)" />
+        android:description="@string/restriction_id_desc" />
     <restriction
         android:key="url"
-        android:title="Server URL"
+        android:title="@string/restriction_url_title"
         android:restrictionType="string"
-        android:description="Traccar Server URL"
+        android:description="@string/restriction_url_desc"
         android:defaultValue="http://mdm.grupo-nso.com.br:5055" />
     <restriction
         android:key="status"
-        android:title="Tracking Status"
+        android:title="@string/restriction_status_title"
         android:restrictionType="bool"
-        android:description="Enable tracking service"
+        android:description="@string/restriction_status_desc"
         android:defaultValue="true" />
     <restriction
         android:key="interval"
-        android:title="Interval (seconds)"
+        android:title="@string/restriction_interval_title"
         android:restrictionType="integer"
-        android:description="Location reporting interval in seconds"
+        android:description="@string/restriction_interval_desc"
         android:defaultValue="300" />
     <restriction
         android:key="distance"
-        android:title="Distance (meters)"
+        android:title="@string/restriction_distance_title"
         android:restrictionType="integer"
-        android:description="Location reporting distance in meters"
+        android:description="@string/restriction_distance_desc"
         android:defaultValue="75" />
     <restriction
         android:key="angle"
-        android:title="Angle (degrees)"
+        android:title="@string/restriction_angle_title"
         android:restrictionType="integer"
-        android:description="Angle filter in degrees"
+        android:description="@string/restriction_angle_desc"
         android:defaultValue="0" />
     <restriction
         android:key="accuracy"
-        android:title="Accuracy"
+        android:title="@string/restriction_accuracy_title"
         android:restrictionType="string"
-        android:description="Location accuracy"
+        android:description="@string/restriction_accuracy_desc"
         android:defaultValue="medium" />
 </restrictions>

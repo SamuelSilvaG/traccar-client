@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Traccar Client</string>
+    <string name="restriction_id_title">Device ID</string>
+    <string name="restriction_id_desc">Device Identifier</string>
+    <string name="restriction_url_title">Server URL</string>
+    <string name="restriction_url_desc">Traccar Server URL</string>
+    <string name="restriction_status_title">Tracking Status</string>
+    <string name="restriction_status_desc">Enable tracking service</string>
+    <string name="restriction_interval_title">Interval (seconds)</string>
+    <string name="restriction_interval_desc">Location reporting interval in seconds</string>
+    <string name="restriction_distance_title">Distance (meters)</string>
+    <string name="restriction_distance_desc">Location reporting distance in meters</string>
+    <string name="restriction_angle_title">Angle (degrees)</string>
+    <string name="restriction_angle_desc">Angle filter in degrees</string>
+    <string name="restriction_accuracy_title">Accuracy</string>
+    <string name="restriction_accuracy_desc">Location accuracy</string>
+</resources>

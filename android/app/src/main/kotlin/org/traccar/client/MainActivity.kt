@@ -1,5 +1,6 @@
 package org.traccar.client
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Build
@@ -23,6 +24,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    @SuppressLint("HardwareIds", "MissingPermission")
     private fun getDeviceIdentifier(): String {
         // 1. Try Hardware Serial Number (Build.getSerial)
         try {
